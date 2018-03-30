@@ -8,17 +8,10 @@
     </keep-alive>
     <p>1</p><p>1</p><p>1</p><p>1</p><p>1</p><p>1</p><p>1</p><p>1</p><p>1</p><p>1</p><p>1</p><p>1</p><p>1</p><p>1</p><p>1</p><p>1</p><p>1</p>
     <p>1</p><p>1</p><p>1</p><p>1</p><p>1</p><p>1</p><p>1</p><p>1</p><p>1</p><p>1</p><p>1</p><p>1</p><p>1</p><p>1</p><p>1</p><p>1</p><p>1</p>
-    <p><img v-lazy="imgUrl" /></p>
-    <p><img v-lazy="imgUrl" /></p>
-    <p><img v-lazy="imgUrl" /></p>
-    <p><img v-lazy="imgUrl" /></p>
-    <p><img v-lazy="imgUrl" /></p>
-    <p><img v-lazy="imgUrl" /></p>
-    <p><img v-lazy="imgUrl" /></p>
-    <p><img v-lazy="imgUrl" /></p>
-    <p><img v-lazy="imgUrl" /></p>
-    <p><img v-lazy="imgUrl" /></p>
-    <p><img v-lazy="imgUrl" /></p>
+    <div class="list">
+      <input type="text" name="" v-model="msg" style="display:block;margin:50px auto;">
+      <img v-lazy="src" v-for="src in list"  style="display:block;margin:0 auto;" />
+    </div>
   </div>
 </template>
 
@@ -28,8 +21,27 @@ export default {
   data() {
     return {
       imgUrl: '/static/img.JPEG',
-      imgUr2: '/static/error-picture-128.png'
+      imgUr2: '/static/error-picture-128.png',
+      list: [
+        'http://sgjs.4006996669.com/doc/example/carousel/1.jpg',
+        'http://sgjs.4006996669.com/doc/example/carousel/2.jpg',
+        'http://sgjs.4006996669.com/doc/example/carousel/3.jpg',
+        'http://sgjs.4006996669.com/doc/example/carousel/4.jpg',
+        'http://sgjs.4006996669.com/doc/example/carousel/5.jpg',
+        'http://sgjs.4006996669.com/doc/example/carousel/6.jpg',
+        'http://sgjs.4006996669.com/doc/example/carousel/7.jpg',
+        'http://sgjs.4006996669.com/doc/example/carousel/8.jpg',
+        'http://sgjs.4006996669.com/doc/example/carousel/9.jpg',
+        'http://sgjs.4006996669.com/doc/example/carousel/10.jpg',
+        'http://sgjs.4006996669.com/doc/example/carousel/11.jpg'
+      ],
+      msg: ''
     };
+  },
+  mounted() {
+    setTimeout(() => {
+      // this.imgUrl = this.imgUr2;
+    }, 3000)
   }
 };
 </script>

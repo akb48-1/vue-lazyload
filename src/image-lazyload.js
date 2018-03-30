@@ -8,25 +8,25 @@
      */
 import 'intersection-observer';
 
-function push(el, binding) {
+function bind(el, binding) {
+    el.src = params.defaultUrl
     el.placeholder = binding.value;
-    io.observe(el);
 }
 function inserted(el, binding) {
-    el.src = params.defaultUrl;
+    io.observe(el);
 }
 function update(el, binding) {
     console.log(el, binding)
 }
-function remove(el) {
+function unbind(el) {
     console.log(el, binding)
 }
 
 const  hookFn = {
-    bind: (el, binding) => push(el, binding),
+    bind: (el, binding) => bind(el, binding),
     inserted: (el, binding) => inserted(el, binding),
     update: (el, binding) => update(el, binding),
-    unbind: (el, binding) => remove(el, binding),
+    unbind: (el, binding) => unbind(el, binding),
 }
 
 var params = {};
@@ -42,33 +42,36 @@ const io = new IntersectionObserver((entries) => {
         entries.forEach(entrie => {
             fadeOut(entrie.target);
             if (entrie.intersectionRatio <= 0.3) return;
-                loadEvent(entrie, entrie.target.placeholder);
+                loadEvent(entrie.target, entrie.target.placeholder);
         });
 },{
     threshold: [.3]
 });
 
-const loadEvent = function(entrie, placeholder) {
+const loadEvent = function(el, url) {
 
     // 开始更新图片
-    uploadImg(entrie, placeholder);
+    uploadImg(el, url);
 
-    function uploadImg (entrie, placeholder) {
-        var state = entrie.target.getAttribute('lazy') ? entrie.target.getAttribute('lazy') : 'pendding';
+    function uploadImg (el, url) {
+
+        var state = el.getAttribute('lazy') ? el.getAttribute('lazy') : 'pendding';
+            //el.setAttribute('lazy', state);
         var img = new Image();
+
             switch(state)
             {
                 case 'pendding':
-                    entrie.target.src = img.src = placeholder;
+                    el.src = img.src = url;
                     img.onload = function() {
-                        entrie.target.setAttribute('lazy', 'success');
-                        fadeIn(entrie.target);
-                        io.unobserve(entrie.target);
+                        el.setAttribute('lazy', 'success');
+                        fadeIn(el);
+                        io.unobserve(el);
                     };
                     img.onerror = function() {
-                        entrie.target.setAttribute('lazy', 'error');
-                        entrie.target.src = img.src = params.defaultUrl;
-                        fadeIn(entrie.target);
+                        el.setAttribute('lazy', 'error');
+                        el.src = img.src = params.defaultUrl;
+                        fadeIn(el);
                     };
                     break;
                 default:
@@ -77,20 +80,20 @@ const loadEvent = function(entrie, placeholder) {
     }
 }
 
+
+// 过渡动画
 var transitionend = 'transition' in window.document.body.style? 'transitionend' : 'webkitTransitionend';
 var transition = 'transition' in window.document.body.style? 'transition' : 'webkitTransition';
 
-// 初始化图片透明
 var fadeOut = (el) => {
     el.style.opacity = 0;
-    el.style.transition = 'opacity .3s';
-    el.style.webkitTransition = 'opacity .3s';
+    el.style[transition] = 'opacity .3s';
 }
-// 图片显示
+
 var fadeIn = (el) => {
     el.style.opacity = 1;
     
-    el.addEventListener(transitionend, callback(el), false);
+    el.addEventListener(transitionend, callback(el));
     el.removeEventListener(transitionend, callback);
 
     function callback(el) {
