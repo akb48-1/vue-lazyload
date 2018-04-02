@@ -9,17 +9,26 @@
 import 'intersection-observer';
 
 function bind(el, binding) {
-    el.src = params.defaultUrl
+    console.log(el, 'bind');
+    el.src = params.defaultUrl;
     el.placeholder = binding.value;
+    
 }
 function inserted(el, binding) {
+    console.log(el, 'inserted');
     io.observe(el);
 }
 function update(el, binding) {
-    console.log(el, binding)
+    if(binding.value !== binding.oldValue) {
+        console.log(el, 'inserted');
+        el.setAttribute('lazy', 'pendding');
+        bind(el, binding);
+        inserted(el, binding);
+    }
 }
-function unbind(el) {
-    console.log(el, binding)
+function unbind(el, binding) {
+    console.log(el, 'unbind');
+    io.unobserve(el);
 }
 
 const  hookFn = {
@@ -56,7 +65,6 @@ const loadEvent = function(el, url) {
     function uploadImg (el, url) {
 
         var state = el.getAttribute('lazy') ? el.getAttribute('lazy') : 'pendding';
-            //el.setAttribute('lazy', state);
         var img = new Image();
 
             switch(state)
